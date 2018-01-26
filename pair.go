@@ -164,6 +164,30 @@ func (this *Pairs) SortReserve() {
 	sortPairs(this, true)
 }
 
+// ForEach iterates through pairs
+func (this *Pairs) ForEach(iterator func(index int, item Pair)) {
+	if len(*this) <= 0 {
+		return
+	}
+	for i, v := range *this {
+		iterator(i, v)
+	}
+}
+
+// Filter supplies a filter for pairs with your iterator
+func (this *Pairs) Filter(iterator func(index int, item Pair) bool) Pairs {
+	var res = Pairs{}
+	if len(*this) <= 0 {
+		return res
+	}
+	for i, v := range *this {
+		if iterator(i, v) {
+			res = append(res, v)
+		}
+	}
+	return res
+}
+
 func sortPairs(this *Pairs, reverse bool) {
 	if len(*this) <= 0 {
 		return

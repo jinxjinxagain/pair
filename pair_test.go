@@ -178,6 +178,57 @@ func TestSortBySecondReverseFunc(t *testing.T) {
 	}
 }
 
+func TestForEachMethod(t *testing.T) {
+	var data = []Pair{
+		Pair{1, "1"},
+		Pair{2, "2"},
+		Pair{3, "3"},
+		Pair{4, "4"},
+		Pair{5, "5"},
+		Pair{6, "6"},
+	}
+	var pairs = MakePairs(data)
+	var res = []Pair{}
+	pairs.ForEach(func(index int, pair Pair) {
+		if pair.FInt() > 3 {
+			res = append(res, pair)
+		}
+	})
+	var ansStart = 4
+	for i := range res {
+		var sec = strconv.Itoa(ansStart)
+		expected(t, ansStart == res[i].FInt(), ansStart, res[i].FInt())
+		expected(t, sec == res[i].SString(), sec, res[i].SString())
+		ansStart++
+	}
+}
+func TestFilterMethod(t *testing.T) {
+	var data = []Pair{
+		Pair{1, "1"},
+		Pair{2, "2"},
+		Pair{3, "3"},
+		Pair{4, "4"},
+		Pair{5, "5"},
+		Pair{6, "6"},
+	}
+	var pairs = MakePairs(data)
+	var filter = pairs.Filter(func(index int, pair Pair) bool {
+		pair.Second = "7"
+		if pair.FInt() > 3 {
+			return true
+		}
+		return false
+	})
+
+	var ansStart = 4
+	for i := range filter {
+		var sec = strconv.Itoa(ansStart)
+		expected(t, ansStart == filter[i].FInt(), ansStart, filter[i].FInt())
+		expected(t, sec == filter[i].SString(), sec, filter[i].SString())
+		ansStart++
+	}
+}
+
 func assert(t testing.TB, cond bool) {
 	if !cond {
 		panic("assert failed")
